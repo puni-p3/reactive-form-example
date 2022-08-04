@@ -1,52 +1,69 @@
 <div class="flex justify-center p-4">
   <form [formGroup]="profileForm" class="flex flex-col max-w-md gap-2">
 
-    <input formControlName="fullName" type="text" class="form-input" placeholder="Full name" />
+    <div class="flex flex-col">
+      <label for="fullName">Full name <span class="red">*</span></label>
+      <input formControlName="fullName" id="fullName" type="text" class="form-input " placeholder="John Doe" />
+      <span *ngIf="isRequired('fullName')">Full name is required</span>
+    </div>
 
-    <input formControlName="email" type="email" class="form-input" placeholder="Email" />
+    <div class="flex flex-col">
+      <label for="email">Email <span class="red">*</span></label>
+      <input formControlName="email" id="email" type="email" class="form-input" placeholder="Email" />
+      <span *ngIf="isRequired('email')">Email is required</span>
+      <span *ngIf="isValid('email')">Invalid Email</span>
+    </div>
 
-    <input formControlName="mobile" type="number" class="form-input" placeholder="Mobile" />
+    <div class="flex flex-col">
+      <label for="mobile">Mobile <span class="red">*</span></label>
+      <input formControlName="mobile" id="mobile" type="number" class="form-input" placeholder="Mobile" />
+      <span *ngIf="isRequired('mobile')">Mobile is required</span>
+      <span *ngIf="isValid('mobile')">Invalid Mobile</span>
+    </div>
 
-    <div>
-      <label>Gender</label>
+    <div class="flex flex-col">
+      <label>Gender <span class="red">*</span></label>
       <div class="flex items-center mb-1 gap-1">
         <input formControlName="gender" type="radio" id="male" class="form-radio" name="gender" value="male">
         <label for="male"> Male</label>
         <input formControlName="gender" type="radio" id="female" class="form-radio" name="gender" value="female">
         <label for="female"> Female</label>
       </div>
+      <span *ngIf="isRequired('gender')">Gender is required</span>
     </div>
 
     <div class="flex flex-col">
       <label>Date of birth</label>
       <input formControlName="dob" type="date" class="form-input" placeholder="dob" />
+      <span *ngIf="isRequired('dob')">DOB is required</span>
     </div>
 
     <div formArrayName="languages">
-      <label>Choice of languages</label>
+      <label>Choice of languages <span class="red">*</span></label>
       <div>
         <ng-container *ngFor="let language of languages; let i = index">
           <input [formControlName]="i" class="form-checkbox" id="language{{i}}" type="checkbox">
           <label class="cursor-pointer" for="language{{i}}"> {{language.label | titlecase}} </label>
         </ng-container>
       </div>
+      <span *ngIf="isRequiredOne('languages')">One or more language is required</span>
     </div>
 
     <div>
       <label for="vol">Height ({{profileForm.value.height}} centimetres)</label>
       <br>
-      <input formControlName="height"  class="w-full cursor-pointer" type="range" id="vol" name="vol" min="1" max="250">
+      <input formControlName="height" class="w-full cursor-pointer" type="range" id="vol" name="vol" min="1" max="250">
     </div>
 
-    <div>
-      <label for="avatar">Avatar</label>
-      <br>
+    <div class="flex flex-col">
+      <label for="avatar">Avatar <span class="red">*</span></label>
       <input formControlName="avatar" type="file" id="avatar" class="mt-1" accept="image/*" placeholder="Avatar" />
+      <span *ngIf="isRequired('avatar')">Avatar is required</span>
     </div>
 
     <div formArrayName="hobbies">
       <div class="flex justify-between">
-        <label>Hobbies</label>
+        <label>Hobbies <span class="red">*</span></label>
         <button type="button" (click)="addHobby()">+ Add</button>
       </div>
 
@@ -54,20 +71,27 @@
         <input [formControlName]="i" id="hobby-{{ i }}" type="text">
         <button type="button" class="px-4" (click)="removeHobby(i)">x</button>
       </div>
+      <span *ngIf="isRequiredOne('hobbies')">One or more hobby is required</span>
     </div>
 
     <div [formGroup]="addressForm">
-      <label>Address</label>
+      <label>Address <span class="red">*</span></label>
       <div class="flex flex-col gap-2">
         <input formControlName="line1" type="text" class="form-input" placeholder="Line1" />
+        <span *ngIf="isRequired('line1', true)">Line 1 is required</span>
         <input formControlName="line2" type="text" class="form-input" placeholder="Line2" />
+        <span *ngIf="isRequired('line2', true)">Line 2 is required</span>
         <select formControlName="city" class="form-select">
           <option value="" disabled>Select a city</option>
           <option value="Delhi">Delhi</option>
           <option value="Noida">Noida</option>
           <option value="Gurugram">Gurugram</option>
         </select>
+        <span *ngIf="isRequired('city', true)">City is required</span>
+
         <input formControlName="pincode" type="number" class="form-input" placeholder="Pincode" />
+        <span *ngIf="isRequired('pincode', true)">Pincode is required</span>
+        <span *ngIf="isValid('pincode', true)">Invalid Pincode</span>
       </div>
     </div>
 

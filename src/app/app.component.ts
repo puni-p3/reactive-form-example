@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 
 const PHONE_PATTERN = /^[6789]{1}[0-9]{9}$/;
@@ -10,7 +10,7 @@ const PINCODE_PATTERN = /\b\d{6}\b/;
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 
   languages = [
     { label: 'english', default: true },
@@ -47,6 +47,20 @@ export class AppComponent {
 
   constructor(private fb: FormBuilder) { }
 
+  ngOnInit(): void {
+    this.profileForm.controls['gender'].valueChanges.subscribe({
+      next: (val) => {
+        const dobControls = this.profileForm.controls['dob'];
+        if (val === 'male') {
+          dobControls.addValidators(Validators.required);
+        } else {
+          dobControls.clearValidators();
+        }
+        dobControls.updateValueAndValidity();
+      }
+    })
+  }
+
   get hobbies() {
     return this.profileForm.get('hobbies') as FormArray;
   }
@@ -78,12 +92,23 @@ export class AppComponent {
     return atLeastOne ? null : { 'atLeastOneError': true };
   }
 
+  isRequired(field: string, isAddress: boolean = false) {
+    const fg = isAddress ? this.addressForm : this.profileForm;
+    return fg.get(field)?.touched && fg.controls?.[field].errors?.['required'];
+  }
+
+  isRequiredOne(field: string) {
+    return this.profileForm.get(field)?.touched && this.profileForm.controls?.[field].errors?.['atLeastOneError'];
+  }
+
+  isValid(field: string, isAddress: boolean = false) {
+    const fg = isAddress ? this.addressForm : this.profileForm;
+    return fg.get(field)?.touched && !fg.controls?.[field].errors?.['required'] && fg.controls?.[field].invalid;
+  }
+
   formSubmit() {
     this.profileForm.markAllAsTouched();
-    if (this.profileForm.invalid) {
-      console.error('Invalid form');
-      return;
-    };
+    if (this.profileForm.invalid) return;
 
     console.log(this.profileForm.getRawValue());
   }
