@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { FormArray, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,28 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'reactive-form-example';
+
+  today = new Date();
+
+  languages = [
+    { label: 'english', default: true },
+    { label: 'german', default: false },
+    { label: 'french', default: false },
+    { label: 'hindi', default: false }
+  ];
+
+  constructor() { }
+
+
+  addHobby() {
+
+  }
+
+  removeHobby(index: number) {
+    
+  }
+
+  formSubmit() {
+
+  }
 }
