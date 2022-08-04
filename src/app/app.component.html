@@ -1,72 +1,73 @@
 <div class="flex justify-center p-4">
-  <form class="flex flex-col max-w-md gap-2">
+  <form [formGroup]="profileForm" class="flex flex-col max-w-md gap-2">
 
-    <input type="text" class="form-input" placeholder="Full name" />
+    <input formControlName="fullName" type="text" class="form-input" placeholder="Full name" />
 
-    <input type="email" class="form-input" placeholder="Email" />
+    <input formControlName="email" type="email" class="form-input" placeholder="Email" />
 
-    <input type="number" class="form-input" placeholder="Mobile" />
+    <input formControlName="mobile" type="number" class="form-input" placeholder="Mobile" />
 
     <div>
       <label>Gender</label>
       <div class="flex items-center mb-1 gap-1">
-        <input type="radio" id="male" class="form-radio" name="gender" value="male">
+        <input formControlName="gender" type="radio" id="male" class="form-radio" name="gender" value="male">
         <label for="male"> Male</label>
-        <input type="radio" id="female" class="form-radio" name="gender" value="female">
+        <input formControlName="gender" type="radio" id="female" class="form-radio" name="gender" value="female">
         <label for="female"> Female</label>
       </div>
     </div>
 
     <div class="flex flex-col">
       <label>Date of birth</label>
-      <input type="date" class="form-input" placeholder="dob" />
+      <input formControlName="dob" type="date" class="form-input" placeholder="dob" />
     </div>
 
-    <div>
+    <div formArrayName="languages">
       <label>Choice of languages</label>
       <div>
         <ng-container *ngFor="let language of languages; let i = index">
-          <input class="form-checkbox" id="language{{i}}" type="checkbox">
+          <input [formControlName]="i" class="form-checkbox" id="language{{i}}" type="checkbox">
           <label class="cursor-pointer" for="language{{i}}"> {{language.label | titlecase}} </label>
         </ng-container>
       </div>
     </div>
 
     <div>
-      <label for="vol">Height (180 centimetres)</label>
+      <label for="vol">Height ({{profileForm.value.height}} centimetres)</label>
       <br>
-      <input class="w-full cursor-pointer" type="range" id="vol" name="vol" min="1" max="250">
+      <input formControlName="height"  class="w-full cursor-pointer" type="range" id="vol" name="vol" min="1" max="250">
     </div>
 
     <div>
       <label for="avatar">Avatar</label>
       <br>
-      <input type="file" id="avatar" class="mt-1" accept="image/*" placeholder="Avatar" />
+      <input formControlName="avatar" type="file" id="avatar" class="mt-1" accept="image/*" placeholder="Avatar" />
     </div>
 
-    <div>
+    <div formArrayName="hobbies">
       <div class="flex justify-between">
         <label>Hobbies</label>
         <button type="button" (click)="addHobby()">+ Add</button>
       </div>
-      <div class="flex justify-between">
-        <input class="form-input" id="hobby" type="text">
-        <button type="button" class="px-4" (click)="removeHobby(0)">x</button>
+
+      <div class="flex justify-between mb-2" *ngFor="let hobby of hobbies.controls; let i=index">
+        <input [formControlName]="i" id="hobby-{{ i }}" type="text">
+        <button type="button" class="px-4" (click)="removeHobby(i)">x</button>
       </div>
     </div>
 
-    <div>
+    <div [formGroup]="addressForm">
       <label>Address</label>
       <div class="flex flex-col gap-2">
-        <input type="text" class="form-input" placeholder="Line1" />
-        <input type="text" class="form-input" placeholder="Line2" />
-        <select class="form-select">
+        <input formControlName="line1" type="text" class="form-input" placeholder="Line1" />
+        <input formControlName="line2" type="text" class="form-input" placeholder="Line2" />
+        <select formControlName="city" class="form-select">
           <option value="" disabled>Select a city</option>
           <option value="Delhi">Delhi</option>
           <option value="Noida">Noida</option>
           <option value="Gurugram">Gurugram</option>
         </select>
-        <input type="number" class="form-input" placeholder="Pincode" />
+        <input formControlName="pincode" type="number" class="form-input" placeholder="Pincode" />
       </div>
     </div>
 
